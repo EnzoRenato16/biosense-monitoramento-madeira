@@ -1,20 +1,14 @@
-
-// Código completo para ESP32-CAM com DHT22 - Servidor Web
 #include <WiFi.h>
 #include <WebServer.h>
 #include <DHT.h>
 #include "esp_camera.h"
 
-// ===== CONFIGURAÇÕES WI-FI =====
-const char* ssid = "SEU_SSID";
 const char* password = "SUA_SENHA";
 
-// ===== CONFIGURAÇÕES DHT22 =====
 #define DHTPIN 13         // Pino de dados do DHT22
 #define DHTTYPE DHT22     // Tipo do sensor
 DHT dht(DHTPIN, DHTTYPE);
 
-// ===== CONFIGURAÇÃO DA CÂMERA ESP32-CAM =====
 #define PWDN_GPIO_NUM    -1
 #define RESET_GPIO_NUM   -1
 #define XCLK_GPIO_NUM     0
