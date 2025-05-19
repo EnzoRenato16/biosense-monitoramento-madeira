@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biosense | Monitoramento de Madeira</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="overlay">
+    <header>
+      <h1>🌿 Biosense</h1>
+      <p>Monitoramento inteligente de madeira com imagem e clima em tempo real</p>
+    </header>
+
+    <main class="card">
+      <div class="camera-frame">
+        <img id="camera" src="http://192.168.0.150/cam" alt="Imagem da Madeira em Tempo Real">
+      </div>
+      <div class="dados">
+        <div><span class="label">🌡️ Temperatura:</span> <span id="temp">--</span> °C</div>
+        <div><span class="label">💧 Umidade:</span> <span id="hum">--</span> %</div>
+      </div>
+    </main>
+
+    <footer>
+      &copy; 2025 Biosense Ambiental. Todos os direitos reservados.
+    </footer>
+  </div>
+
+  <script>
+    const ipESP = "http://192.168.0.150";
+
+    function atualizarDados() {
+      fetch(ipESP + "/dados")
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("temp").textContent = data.temperatura.toFixed(1);
+          document.getElementById("hum").textContent = data.umidade.toFixed(1);
+        })
+        .catch(error => console.error("Erro ao buscar dados do DHT22:", error));
+    }
+
+    setInterval(atualizarDados, 5000);
+    atualizarDados();
+  </script>
+</body>
+</html>
