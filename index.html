@@ -2,49 +2,101 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Biosense | Monitoramento de Madeira</title>
-  <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <div class="overlay">
-    <header>
-      <h1>🌿 Biosense</h1>
-      <p>Monitoramento inteligente de madeira com imagem e clima em tempo real</p>
-    </header>
-    <title>ESP32-CAM Ao Vivo</title>
-</head>
-<body>
-  <h1>Transmissão da Câmera</h1>
-  <img src="http://192.168.0.21" width="640" height="480" alt="ESP32-CAM">
-      </div>
-      <div class="dados">
-        <div><span class="label">🌡️ Temperatura:</span> <span id="temp">--</span> °C</div>
-        <div><span class="label">💧 Umidade:</span> <span id="hum">--</span> %</div>
-      </div>
-    </main>
+  <title>Monitoramento Florestal</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: url('https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      text-align: center;
+    }
 
-    <footer>
-      &copy; 2025 Biosense Ambiental. Todos os direitos reservados.
-    </footer>
+    header {
+      background-color: rgba(0, 100, 0, 0.8);
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .container {
+      margin: 30px auto;
+      background: rgba(0, 50, 0, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    .dados {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .camera {
+      border: 4px solid #fff;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 640px;
+      height: auto;
+    }
+
+    .refresh {
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #2e8b57;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #3cb371;
+    }
+  </style>
+</head>
+<body>
+
+  <header>🌳 Monitoramento Ambiental - Floresta 🌳</header>
+
+  <div class="container">
+    <div class="dados">
+      🌡️ Temperatura: <span id="temp">--</span> °C <br>
+      💧 Umidade: <span id="umid">--</span> %
+    </div>
+
+    <img id="cam" class="camera" src="http://192.168.0.21" alt="Câmera ESP32-CAM">
+
+    <div class="refresh">
+      <button onclick="atualizarDados()">Atualizar Dados</button>
+    </div>
   </div>
 
   <script>
-    const ipESP = "http://192.168.0.150";
-
-    function atualizarDados() {
-      fetch(ipESP + "/dados")
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById("temp").textContent = data.temperatura.toFixed(1);
-          document.getElementById("hum").textContent = data.umidade.toFixed(1);
-        })
-        .catch(error => console.error("Erro ao buscar dados do DHT22:", error));
+    async function atualizarDados() {
+      try {
+        const resposta = await fetch('http://192.168.0.21/dados');
+        const json = await resposta.json();
+        document.getElementById("temp").textContent = json.temperatura.toFixed(1);
+        document.getElementById("umid").textContent = json.umidade.toFixed(1);
+      } catch (e) {
+        alert("Erro ao buscar dados do sensor. Verifique o IP e a conexão.");
+      }
     }
 
-    setInterval(atualizarDados, 5000);
+    // Atualiza a cada 15 segundos automaticamente
+    setInterval(atualizarDados, 15000);
     atualizarDados();
   </script>
+
 </body>
 </html>
